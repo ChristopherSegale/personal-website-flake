@@ -31,8 +31,7 @@
       packages = {
         default = pkgs.lispPackagesLite.lispDerivation {
           pname = name;
-          version = "1.0";
-          inherit buildInputs;
+          inherit version buildInputs;
           lispSystem = "serve-website";
           lispDependencies = with pkgs.lispPackagesLite; [
             bordeaux-threads
@@ -43,13 +42,14 @@
           patches = [ ./personal-website.patch ];
           installPhase = ''
             mkdir -p $out/bin
+            mkdir -p $out/var/serve-website
             echo "#!${pkgs.runtimeShell}" >> $out/bin/${scriptName}
-            printf "cd %s\n" $out >> $out/bin/${scriptName}
+            printf "cd %s\n" $out/var/serve-website >> $out/bin/${scriptName}
             echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${pkgs.lib.makeLibraryPath buildInputs} ./serve-website" >> $out/bin/${scriptName}
             chmod 0555 $out/bin/${scriptName}
-            cp serve-website $out
-            cp -r web-resources $out
-            cp -r ${contents}/web-resources/* $out/web-resources
+            cp serve-website $out/var/serve-website
+            cp -r web-resources $out/var/serve-website
+            cp -r ${contents}/web-resources/* $out/var/serve-website/web-resources
           '';
         };
         meta.license = pkgs.lib.licenses.mit;
