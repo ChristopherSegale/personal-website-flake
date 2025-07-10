@@ -1,0 +1,117 @@
+diff --git a/contents.wpt b/contents.wpt
+index f209357..0210e85 100644
+--- a/contents.wpt
++++ b/contents.wpt
+@@ -19,37 +19,72 @@
+ ;;; Home Page
+ ((:handler-name home-page
+   :uri "/"
+-  :meta-title "Serve Website"
+-  :title "Serve Website")
+-  "Here is an example of how a website can be written using Serve Website.  Here are some reasons for why you would want to use Serve Website to build a website."
+-  (:ordered
+-    "Navigation bar is created automatically as the program is compiled."
+-    "Not having to deal with HTML markup when designing your website outside of source code."
+-    "Website is compiled into an executable as opposed to multiple script files dependent on another program to run.")
+-  ("Here is an unordered list"
+-   "It is made by using a list of strings"))
+-
+-((:handler-name projects
+-  :uri "/projects"
+-  :meta-title "Projects"
+-  :title "Projects")
+-  "Projects are a good way of displaying projects you have been a part of."
++  :meta-title "Christopher Segale"
++  :title "Christopher Segale's Website")
++  "Hello there.  This is the website for Christopher Charles Segale.  I consider myself a person that is highly interested in the computer industry who happens to do some programming as a hobby.  This website will cover some of my interests as well as a number of projects I have taken part of."
++  "As a general way of introducing myself, I consider myself a person who is into computers whether it be building them, adminstrating them, or writing applications for them.  The primary operating system I use tends to be Linux-based operating systems due to how customizable they are as well as the developer tools available for use.  I also have experience in running Windows-based systems on bare metal as well as in virtualized environments.")
++
++((:handler-name programming-languages
++  :uri "/programming-languages"
++  :meta-title "Programming Languages"
++  :title "Programming Languages I am Proficient in")
++  "Here are a list of programming languages I am proficient in:"
++  ("C" "C++" "C#" "Common Lisp" "Python" "Go" "Java" "Javascript" "PHP")
++  "In terms of programming languages, I have the most experience with using C and Common Lisp to develop a number of applications ranging from text manipulation-based command line programs to graphical programs such as video games. I have also used PHP in order to create a web-based message board. My understanding of industry-standard programming languages are also something I am comfortable with. These languages would include Java and Python. I have also experimented with Go."
++  "I have a good understanding of a number of programming paradigms including procedural, object oriented, and functional. The kinds of applications I developed include SaaS web applications, command line programs, and video games. While most of my experience revolves around backend logic, I can also do frontend development.")
++
++((:handler-name system-administration
++  :uri "/system-administration"
++  :meta-title "System Administration"
++  :title "Operating Systems I have administrated")
++  "Here is a list of operating systems I have administrated:"
++  ("Red Hat" "Ubuntu" "Slackware" "Void Linux" "OpenBSD" "FreeBSD" "Windows 7" "Windows 10")
++  "Concerning system administration, most of my experience revolves around Unix-like operating systems.  I have experience in writing shell scripts, creating software packages, creating users, generating and assigning ssh keys, and setting up cronjobs.")
++
++((:handler-name system-builder
++  :uri "/system-building"
++  :meta-title "System Building"
++  :title "System Building")
++  "I have an interest in building my own computer systems.  My experience in this area are in making Intel and AMD systems.  In addition, I have experience in creating custom water loops in order to cool processors, GPUs, and motherboard VRMs.  The tubing I am used to using when creating these custom water loops are made out of PETG.")
++
++((:handler-name virtualization
++  :uri "/virtualization"
++  :meta-title "Virtualization"
++  :title "Virtualization")
++  "Concerning virtual machines, I do have experience in running Qemu with KVM on a Linux host.  In addition, I have used hardware passthrough to pass through pcie devices from a host machine to a virtual machine such as USB controllers as well as audio and video cards."
++  "I also ran an AWS instance in order to host a message board which implemented a LAMP stack via an EC2 instance.")
++
++((:handler-name notable-projects
++  :uri "/notable-projects"
++  :meta-title "Notable Projects"
++  :title "Notable Projects")
++  "Here are a list of personal projects I have completed:"
++  (:project
++    "Anonymous Message Board"
++    "PHP"
++    "https://github.com/ChristopherSegale/senior_project"
++    ("img/anonymous-board.png" "img/anonymous-board_mobile.png")
++    "A message board where users can anonymously send posts to the message board for other users to read."
++    "Wrote the backend logic of the website in PHP as well as the shell script to check on logged-in time for site faculty.")
++  (:project
++    "CL-Snake"
++    "Common Lisp"
++    "https://github.com/ChristopherSegale/cl-snake"
++    ("img/snake.png" "img/snake_mobile.png")
++    "An implementation of snake using the sdl2 and cl-opengl packages."
++    "Wrote the domain specific language for the snake program as well as the logic of the game.")
+   (:project
+-    "Foo" ;Project Name
+-    "Bar" ;Language project is written in
+-    "https://fakerepository.com/baz"
+-    nil ;If using images, have this line be a list of two image file paths.  Example: ("/image/path/desktop" "/image/path/mobile")
+-    "This line is used to describe the project."
+-    "This line is used to describe how you contributed to the project."))
+-    
++    "XF-Scraper"
++    "Common Lisp"
++    "https://github.com/ChristopherSegale/xf-scraper"
++    ("img/xf-scraper.png" "img/xf-scraper_mobile.png")
++    "A command-line program written in Common Lisp which scrapes the textual contents of a post in XenForo-based message boards."))
+ 
+ ((:handler-name contact
+   :uri "/contact"
+   :meta-title "Contact Information"
+   :title "Contact Information")
+-  "Here is how contact information can be given."
+   (:contact :phone
+-    "111-111-1111")
++    "813-528-3813")
+   (:contact :email
+-    "notreal@fake.org")
+-  "Phone contacts will list the phone number in a desktop viewport and as a hyperlink in a mobile viewport.")
+\ No newline at end of file
++    "ccs.segale@gmail.com"))
+diff --git a/package.lisp b/package.lisp
+index e11b1d0..11c325f 100644
+--- a/package.lisp
++++ b/package.lisp
+@@ -4,7 +4,7 @@
+ 
+ (in-package :serve-website)
+ 
+-(defconstant +port+ 8080)
++(defconstant +port+ 80)
+ (defconstant +root+ #P"web-resources/")
+ 
+ (defvar *collapse-menu* "var coll = document.getElementsByClassName(\"collapsible\"); var i; for (i = 0; i < coll.length; i++) { coll[i].addEventListener(\"click\", function() { this.classList.toggle(\"block\"); var content = this.nextElementSibling; if (content.style.display === \"block\") { content.style.display = \"none\"; } else { content.style.display = \"block\"; } }); }")
