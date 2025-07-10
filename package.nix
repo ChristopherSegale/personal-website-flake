@@ -1,6 +1,13 @@
 {pkgs, name, version, scriptName }:
 
-pkgs.lispPackagesLite.lispDerivation rec {
+let
+  contents = pkgs.fetchFromGitHub {
+    owner = "ChristopherSegale";
+    repo = "personal-website";
+    rev = "2f284cf";
+    hash = "sha256-MZ5OvLALRwYqsbZZDDkcA9S2PWvPnNvl2XFpDU9fZhU=";
+  };
+in pkgs.lispPackagesLite.lispDerivation rec {
   pname = name;
   inherit version scriptName;
   buildInputs = with pkgs; [ openssl_3 ];
@@ -26,11 +33,6 @@ pkgs.lispPackagesLite.lispDerivation rec {
     chmod 0555 $out/bin/${scriptName}
     cp serve-website $out/var/serve-website
     cp -r web-resources $out/var/serve-website
-    cp -r ${pkgs.fetchFromGitHub {
-              owner = "ChristopherSegale";
-              repo = "personal-website";
-              rev = "2f284cf";
-              hash = "sha256-MZ5OvLALRwYqsbZZDDkcA9S2PWvPnNvl2XFpDU9fZhU=";
-            }}/web-resources/* $out/var/serve-website/web-resources
+    cp -r ${contents}/web-resources/* $out/var/serve-website/web-resources
   '';
 }
