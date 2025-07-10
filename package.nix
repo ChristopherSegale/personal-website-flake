@@ -1,6 +1,6 @@
 {pkgs, name, version, web-server, contents, scriptName }:
 
-pkgs.lispPackagesLite.lispDerivation {
+pkgs.lispPackagesLite.lispDerivation rec {
   pname = name;
   inherit version web-server contents scriptName;
   buildInputs = with pkgs; [ openssl_3 ];
