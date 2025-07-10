@@ -27,10 +27,6 @@
       };
       buildInputs = with pkgs; [ openssl_3 ];
       scriptName = "run-server";
-      myScript = pkgs.writeShellScriptBin scriptName ''
-        cd ${self}/result
-        LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${pkgs.lib.makeLibraryPath buildInputs} ./serve-website
-      '';
     in {
       packages = {
         default = pkgs.lispPackagesLite.lispDerivation {
@@ -47,7 +43,10 @@
           patches = [ ./personal-website.patch ];
           installPhase = ''
             mkdir -p $out/bin
-            cp ${myScript}/bin/${scriptName} $out/bin
+            echo "#!${pkgs.runtimeShell}" >> $out/bin/${scriptName}
+            printf "cd %s\n" $out >> $out/bin/${scriptName}
+            echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${pkgs.lib.makeLibraryPath buildInputs} ./serve-website" >> $out/bin/${scriptName}
+            chmod 0555 $out/bin/${scriptName}
             cp serve-website $out
             cp -r web-resources $out
             cp -r ${contents}/web-resources/* $out/web-resources
