@@ -17,18 +17,6 @@
       packages = {
         default = import ./package.nix {
           inherit pkgs name version;
-          web-server = pkgs.fetchFromGitHub {
-            owner = "ChristopherSegale";
-            repo = "serve-website";
-            rev = "bb64154";
-            hash = "sha256-aWkFlLxJln93GVs+qBYXdX1+/ccVUe8zxAWkBpsKJAU=";
-          };
-          contents = pkgs.fetchFromGitHub {
-            owner = "ChristopherSegale";
-            repo = "personal-website";
-            rev = "2f284cf";
-            hash = "sha256-MZ5OvLALRwYqsbZZDDkcA9S2PWvPnNvl2XFpDU9fZhU=";
-          };
           scriptName = "run-server";
         };
         meta.license = pkgs.lib.licenses.mit;
