@@ -13,12 +13,13 @@
       pkgs = nixpkgs.legacyPackages.${system}.extend cl-nix-lite.overlays.default;
       name = "personal-website";
       version = "1.0";
-    in {
+    in rec {
       packages = {
         default = import ./package.nix {
           inherit pkgs name version;
           scriptName = "run-server";
         };
+        container = pkgs.callPackage ./container.nix { package = packages.default; };
         meta.license = pkgs.lib.licenses.mit;
       };
     });
